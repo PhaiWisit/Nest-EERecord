@@ -20,13 +20,13 @@ export class UsersService {
       },
     });
     if (user) {
-      throw new BadRequestException('Username is already use.');
+      throw new BadRequestException('Username is already use');
     }
     return this.usersRepository.save(createUserDto);
   }
 
   findAll() {
-    return `This action returns all users`;
+    return this.usersRepository.find();
   }
 
   async getMe(username: string): Promise<User> {
