@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Timestamp, CreateDateColumn } from 'typeorm';
 
 @Entity()
 export class Visitor {
@@ -20,11 +20,11 @@ export class Visitor {
     @Column()
     visitorVehecleType: string;
 
-    // @Column({  default: () => 'NOW()', })
-    // visitorEnter: Date;
+    @CreateDateColumn({ name: 'visitor_enter' })
+    visitorEnter: Date;
 
-    // @Column({  default: () => 'NOW()', })
-    // visitorExit: Date;
+    @CreateDateColumn({ name: 'visitor_exit' })
+    visitorExit: Date;
 
     @Column()
     visitorImagePathIdCard: string;
