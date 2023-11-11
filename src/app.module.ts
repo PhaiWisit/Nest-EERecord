@@ -5,12 +5,14 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import { VisitorsModule } from './visitors/visitors.module';
 
 
 @Module({
   imports: [
     AuthModule,
     UsersModule,
+    VisitorsModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',

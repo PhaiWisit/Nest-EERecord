@@ -19,8 +19,9 @@ export class UsersService {
         userName: createUserDto.userName,
       },
     });
-    if (user) {
-      throw new BadRequestException('Username is already use');
+
+    if (!user) {
+      throw new BadRequestException('Error').message;
     }
     return this.usersRepository.save(createUserDto);
   }
@@ -43,7 +44,7 @@ export class UsersService {
   }
 
   findOne(id: number): Promise<User | null> {
-    return this.usersRepository.findOneBy({ id });
+    return this.usersRepository.findOneBy({ userId: id });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
