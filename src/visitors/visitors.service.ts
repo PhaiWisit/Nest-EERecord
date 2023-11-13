@@ -4,9 +4,9 @@ import { UpdateVisitorDto } from './dto/update-visitor.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Visitor } from './entities/visitor.entity';
-import { User } from 'src/users/entities/user.entity';
-import { UsersController } from 'src/users/users.controller';
-import { UsersService } from 'src/users/users.service';
+import { User } from 'src/auth/user.entity';
+// import { UsersController } from 'src/users/users.controller';
+// import { UsersService } from 'src/users/users.service';
 import { VisitorRepository } from './visitors.repository';
 
 @Injectable()

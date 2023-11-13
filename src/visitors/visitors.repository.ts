@@ -3,7 +3,7 @@ import { Visitor } from "./entities/visitor.entity";
 import { AbstractRepository, DataSource, Repository } from "typeorm";
 import { Injectable, Logger } from "@nestjs/common";
 import { CreateVisitorDto } from "./dto/create-visitor.dto";
-import { User } from "src/users/entities/user.entity";
+import { User } from "src/auth/user.entity";
 
 @EntityRepository(Visitor)
 @Injectable()

@@ -6,12 +6,18 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: false })
   username: string;
 
-  @Column()
+  @Column({ nullable: false })
   password: string;
 
+  @Column({ nullable: false })
+  villageName: string;
+
+  @Column({ nullable: false })
+  email: string;
+
   @OneToMany(() => Visitor, (visitor) => visitor.user, { eager: true })
-  tasks: Visitor[];
+  visitors: Visitor[];
 }
