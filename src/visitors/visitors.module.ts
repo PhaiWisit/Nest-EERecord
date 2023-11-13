@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
 import { VisitorsController } from './visitors.controller';
-import { VisitorRepository } from './visitors.repository';
+import { VisitorsRepository } from './visitors.repository';
 import { VisitorsService } from './visitors.service';
 import { Visitor } from './entities/visitor.entity';
 
@@ -12,7 +12,7 @@ import { Visitor } from './entities/visitor.entity';
     TypeOrmModule.forFeature([Visitor]),
   ],
   controllers: [VisitorsController],
-  providers: [VisitorsService, VisitorRepository],
+  providers: [VisitorsService, VisitorsRepository],
   exports: [VisitorsService],
 })
 export class VisitorsModule { }

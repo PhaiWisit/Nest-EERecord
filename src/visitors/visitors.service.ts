@@ -1,56 +1,72 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateVisitorDto } from './dto/create-visitor.dto';
 import { UpdateVisitorDto } from './dto/update-visitor.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Visitor } from './entities/visitor.entity';
 import { User } from 'src/auth/user.entity';
-// import { UsersController } from 'src/users/users.controller';
-// import { UsersService } from 'src/users/users.service';
-import { VisitorRepository } from './visitors.repository';
+import { VisitorsRepository } from './visitors.repository';
+import e from 'express';
 
 @Injectable()
 export class VisitorsService {
 
   constructor(
-
-    // With Foreint key
-    @InjectRepository(VisitorRepository)
-    private visitorRepository: VisitorRepository,
-
-
-    // @InjectRepository(Visitor)
-    // private visitorRepository: Repository<Visitor>,
-
+    @InjectRepository(VisitorsRepository)
+    private visitorRepository: VisitorsRepository,
   ) { }
 
   createVisitor(createVisitorDto: CreateVisitorDto, user: User): Promise<Visitor> {
-    // const visitor = this.visitorRepository.create(createVisitorDto);
-    // let user = await this.usersService.findOne(1);
-    // user = new User();
-    // visitor.user = user;
     return this.visitorRepository.createVisitor(createVisitorDto, user);
   }
 
-  //Create with no foreign key
-  // create(createVisitorDto: CreateVisitorDto): Promise<Visitor> {
-  //   return this.visitorRepository.save(createVisitorDto);
-
-  // }
-
-  findAll() {
-    return this.visitorRepository.find();
+  getVisitors(user: User): Promise<Visitor[]> {
+    return this.visitorRepository.getVisitors(user);
   }
 
-  // findOne(id: number): Promise<Visitor | null> {
-  //   return this.visitorRepository.findOneBy({ id });
+  async getVisitorById(id: string, user: User): Promise<Visitor> {
+    const visitor = await this.visitorRepository.getVisitorById(id, user)
+
+    if (!visitor) {
+      throw new NotFoundException(`Visitor with ID ${id} not found`);
+    }
+
+    return visitor;
+  }
+
+  // async getVisitorById(id: string, user: User) {
+
+  //   const found = await this.visitorRepository.findOne(
+  //     {
+  //       where: {
+  //         id,
+  //         user
+  //       }
+  //     }
+  //   );
+  //   if (!found) {
+  //     throw new NotFoundException(`Visitor with ID ${id} not found`);
+  //   }
+
+  //   return found;
   // }
 
-  // update(id: number, updateVisitorDto: UpdateVisitorDto) {
-  //   return this.visitorRepository.update(id, updateVisitorDto);
-  // }
+  async updateStatus(id: string, user: User, updateVisitorDto: UpdateVisitorDto,): Promise<Visitor> {
+    // const visitor = await this.getVisitorById(id);
+    const visitor = await this.getVisitorById(id, user);
+    visitor.visitorStatus = updateVisitorDto.visitorStatus;
+    await this.visitorRepository.save(visitor);
+    return visitor;
+  }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} visitor`;
+  async deleteVisitor(id: string, user: User): Promise<string> {
+    // const visitor = await this.getVisitorById(id, user);
+
+    // await this.visitorRepository.delete(visitor);
+    return 'removed';
+  }
+
+  // remove(id: string) {
+  //   return this.visitorRepository.remove(id);
   // }
 }

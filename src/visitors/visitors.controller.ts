@@ -10,56 +10,53 @@ import { AuthService } from 'src/auth/auth.service';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('visitors')
+@UseGuards(AuthGuard())
 export class VisitorsController {
   private logger = new Logger('VisitorController');
   constructor(
     private readonly visitorsService: VisitorsService,
-
   ) { }
 
-  // Create with no foreign key
-  // @Post()
-  // create(@Body() createVisitorDto: CreateVisitorDto) {
-  //   const visitor = this.visitorsService.create(createVisitorDto);
-  //   return visitor;
-  // }
-
-  @UseGuards(AuthGuard())
+  
   @Post()
   async createVisitor(
     @Body() createVisitorDto: CreateVisitorDto,
     @GetUser() user: User,
   ): Promise<Visitor> {
-    console.log(user);
-
-    // const user = await this.usersService.findOne("1cf6b6f0-ea3c-4ab0-95e1-549f0be7e691");
-    // this.logger.verbose(
-    //   `User "${user.id}" creating a new task. Data: ${JSON.stringify(
-    //     createVisitorDto,
-    //   )}`,
-    // );
     return this.visitorsService.createVisitor(createVisitorDto, user);
   }
 
+  
   @Get()
-  findAll() {
-    return this.visitorsService.findAll();
+  getVisitors(@GetUser() user: User): Promise<Visitor[]> {
+    return this.visitorsService.getVisitors(user);
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.visitorsService.findOne(+id);
-  // }
+  
+  @Get('/:id')
+  getVisitorById(
+    @Param('id') id: string,
+    @GetUser() user: User
+  ): Promise<Visitor> {
+    return this.visitorsService.getVisitorById(
+      id,user
+    );
+  }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateVisitorDto: UpdateVisitorDto) {
-  //   return this.visitorsService.update(+id, updateVisitorDto);
-  // }
+ 
+  @Patch(':id')
+  updateStatus(
+    @Param('id') id: string,
+    @Body() updateVisitorDto: UpdateVisitorDto,
+    @GetUser() user: User) {
+    return this.visitorsService.updateStatus(id, user, updateVisitorDto);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.visitorsService.remove(+id);
-  // }
+  
+  @Delete(':id')
+  remove(@Param('id') id: string, @GetUser() user: User) {
+    return this.visitorsService.deleteVisitor(id, user);
+  }
 }
 
 

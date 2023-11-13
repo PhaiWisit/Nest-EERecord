@@ -1,5 +1,5 @@
 import { User } from 'src/auth/user.entity';
-import { Exclude } from '@nestjs/class-transformer';
+import { Exclude } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn, Timestamp, CreateDateColumn, ManyToOne } from 'typeorm';
 
 @Entity()
