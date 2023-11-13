@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { VisitorsModule } from './visitors/visitors.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 
 @Module({
@@ -22,6 +23,10 @@ import { VisitorsModule } from './visitors/visitors.module';
       entities: ["dist/**/*.entity{.ts,.js}"],
       autoLoadEntities: true
     }),
+    ThrottlerModule.forRoot([{
+      ttl: 60000,
+      limit: 10,
+    }]),
   ],
   controllers: [AppController],
   providers: [AppService],

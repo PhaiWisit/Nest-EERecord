@@ -8,6 +8,7 @@ import { log } from 'console';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthGuard } from '@nestjs/passport';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller('visitors')
 @UseGuards(AuthGuard())
@@ -17,7 +18,7 @@ export class VisitorsController {
     private readonly visitorsService: VisitorsService,
   ) { }
 
-  
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Post()
   async createVisitor(
     @Body() createVisitorDto: CreateVisitorDto,
