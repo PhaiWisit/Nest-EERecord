@@ -1,11 +1,11 @@
 import { EntityRepository } from "typeorm/decorator/EntityRepository";
 import { Visitor } from "./entities/visitor.entity";
-import { DataSource, Repository } from "typeorm";
+import { AbstractRepository, DataSource, Repository } from "typeorm";
 import { Injectable, Logger } from "@nestjs/common";
 import { CreateVisitorDto } from "./dto/create-visitor.dto";
 import { User } from "src/users/entities/user.entity";
 
-// @EntityRepository(Visitor)
+@EntityRepository(Visitor)
 @Injectable()
 export class VisitorRepository extends Repository<Visitor> {
     //   private logger = new Logger('VisitorsRepository', true);
@@ -43,31 +43,32 @@ export class VisitorRepository extends Repository<Visitor> {
 
     constructor(private dataSource: DataSource) {
         super(Visitor, dataSource.createEntityManager());
-      }
+    }
 
-    // async createVisitor(createVisitorDto: CreateVisitorDto, user: User): Promise<Visitor> {
-        // const { visitorHouseNumber,
-        //     visitorContactMatter,
-        //     visitorEnter,
-        //     visitorExit,
-        //     visitorImagePathIdCard,
-        //     visitorImagePathPalte,
-        //     visitorStatus,
-        //     visitorVehicleType } = createVisitorDto;
+    async createVisitor(createVisitorDto: CreateVisitorDto, user: User): Promise<Visitor> {
+        const { visitorHouseNumber,
+            visitorContactMatter,
+            visitorEnter,
+            visitorExit,
+            visitorImagePathIdCard,
+            visitorImagePathPalte,
+            visitorStatus,
+            visitorVehicleType } = createVisitorDto;
 
-        // const visitor = this.create({
-        //     visitorHouseNumber,
-        //     visitorContactMatter,
-        //     visitorEnter,
-        //     visitorExit,
-        //     visitorImagePathIdCard,
-        //     visitorImagePathPalte,
-        //     visitorVehicleType,
-        //     visitorStatus,
-        //     user,
-        // });
 
-        // await this.save(visitor);
-        // return visitor;
-    // }
+        const visitor = this.create({
+            visitorHouseNumber,
+            visitorContactMatter,
+            visitorEnter,
+            visitorExit,
+            visitorImagePathIdCard,
+            visitorImagePathPalte,
+            visitorVehicleType,
+            visitorStatus,
+            user,
+        });
+
+        await this.save(visitor);
+        return visitor;
+    }
 }

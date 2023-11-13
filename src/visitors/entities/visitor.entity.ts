@@ -8,9 +8,6 @@ export class Visitor {
     id: string;
 
     @Column()
-    userId: string;
-
-    @Column()
     visitorStatus: boolean;
 
     @Column()
@@ -37,7 +34,7 @@ export class Visitor {
     @CreateDateColumn({ name: 'visitor_update', default: () => 'NOW()', nullable: true })
     visitorUpdateTime: Date;
 
-    // @ManyToOne(() => User, (user) => user.visitors, { eager: false })
-    // @Exclude({ toPlainOnly: true })
-    // user: User;
+    @ManyToOne(() => User, (user) => user.visitors, { eager: false, })
+    @Exclude({ toPlainOnly: true })
+    user: User;
 }

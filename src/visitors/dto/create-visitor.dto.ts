@@ -11,5 +11,5 @@ export class CreateVisitorDto {
     visitorExit: Date;
     visitorImagePathIdCard: string;
     visitorImagePathPalte: string;
-    visitorUpdatetime: Date;
+    // visitorUpdatetime: Date;
 }

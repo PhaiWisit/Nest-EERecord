@@ -21,6 +21,6 @@ export class User {
     @CreateDateColumn({ name: 'user_update', default: () => 'NOW()', nullable: true })
     userUpdateTime: Date;
 
-    // @OneToMany(() => Visitor, (visitors) => visitors.user)
-    // visitors: Visitor[];
+    @OneToMany(() => Visitor, (visitors) => visitors.user )
+    visitors: Visitor[];
 }

@@ -14,30 +14,29 @@ export class VisitorsService {
 
   constructor(
 
-    // With Forent key
-    // @InjectRepository(VisitorRepository)
-    // private visitorRepository: VisitorRepository,
+    // With Foreint key
+    @InjectRepository(VisitorRepository)
+    private visitorRepository: VisitorRepository,
 
 
-    @InjectRepository(Visitor)
-    private visitorRepository: Repository<Visitor>,
-    private usersService: UsersService,
+    // @InjectRepository(Visitor)
+    // private visitorRepository: Repository<Visitor>,
+
   ) { }
 
-  // createVisitor(createVisitorDto: CreateVisitorDto, user: User): Promise<Visitor> {
-  //   // const visitor = this.visitorRepository.create(createVisitorDto);
-  //   // let user = await this.usersService.findOne(1);
-  //   // user = new User();
-  //   // visitor.user = user;
-  //   return this.visitorRepository.createVisitor(createVisitorDto, user);
-    
-  // }
+  createVisitor(createVisitorDto: CreateVisitorDto, user: User): Promise<Visitor> {
+    // const visitor = this.visitorRepository.create(createVisitorDto);
+    // let user = await this.usersService.findOne(1);
+    // user = new User();
+    // visitor.user = user;
+    return this.visitorRepository.createVisitor(createVisitorDto, user);
+  }
 
   //Create with no foreign key
-  create(createVisitorDto: CreateVisitorDto): Promise<Visitor> {
-    return this.visitorRepository.save(createVisitorDto);
-    
-  }
+  // create(createVisitorDto: CreateVisitorDto): Promise<Visitor> {
+  //   return this.visitorRepository.save(createVisitorDto);
+
+  // }
 
   findAll() {
     return this.visitorRepository.find();
@@ -47,11 +46,11 @@ export class VisitorsService {
   //   return this.visitorRepository.findOneBy({ id });
   // }
 
-  update(id: number, updateVisitorDto: UpdateVisitorDto) {
-    return this.visitorRepository.update(id, updateVisitorDto);
-  }
+  // update(id: number, updateVisitorDto: UpdateVisitorDto) {
+  //   return this.visitorRepository.update(id, updateVisitorDto);
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} visitor`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} visitor`;
+  // }
 }
