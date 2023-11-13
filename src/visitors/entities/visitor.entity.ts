@@ -1,9 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, Timestamp, CreateDateColumn } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import { Exclude } from '@nestjs/class-transformer';
+import { Entity, Column, PrimaryGeneratedColumn, Timestamp, CreateDateColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Visitor {
-    @PrimaryGeneratedColumn()
-    visitorId: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column()
     userId: string;
@@ -18,7 +20,7 @@ export class Visitor {
     visitorContactMatter: string;
 
     @Column()
-    visitorVehecleType: string;
+    visitorVehicleType: string;
 
     @CreateDateColumn({ name: 'visitor_enter' })
     visitorEnter: Date;
@@ -32,7 +34,10 @@ export class Visitor {
     @Column()
     visitorImagePathPalte: string;
 
-    // @Column({ type: 'timestamp', default: () => 'NOW()', })
-    // visitorUpdateTime: Date;
+    @CreateDateColumn({ name: 'visitor_update', default: () => 'NOW()', nullable: true })
+    visitorUpdateTime: Date;
 
+    // @ManyToOne(() => User, (user) => user.visitors, { eager: false })
+    // @Exclude({ toPlainOnly: true })
+    // user: User;
 }

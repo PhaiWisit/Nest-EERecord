@@ -6,7 +6,7 @@ export class CreateVisitorDto {
     visitorStatus: boolean;
     visitorHouseNumber: string;
     visitorContactMatter: string;
-    visitorVehecleType: string;
+    visitorVehicleType: string;
     visitorEnter: Date;
     visitorExit: Date;
     visitorImagePathIdCard: string;

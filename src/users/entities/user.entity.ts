@@ -1,9 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Visitor } from 'src/visitors/entities/visitor.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, CreateDateColumn } from 'typeorm';
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
-    userId: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column({ unique: true })
     userName: string;
@@ -16,4 +17,10 @@ export class User {
 
     @Column()
     email: string;
+
+    @CreateDateColumn({ name: 'user_update', default: () => 'NOW()', nullable: true })
+    userUpdateTime: Date;
+
+    // @OneToMany(() => Visitor, (visitors) => visitors.user)
+    // visitors: Visitor[];
 }

@@ -11,6 +11,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+
   ) { }
 
   create(createUserDto: CreateUserDto): Promise<User> {
@@ -39,12 +40,11 @@ export class UsersService {
     if (!user) {
       throw new BadRequestException('User not found');
     }
-
     return user;
   }
 
-  findOne(id: number): Promise<User | null> {
-    return this.usersRepository.findOneBy({ userId: id });
+  findOne(id: string): Promise<User | null> {
+    return this.usersRepository.findOneBy({ id: id });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
