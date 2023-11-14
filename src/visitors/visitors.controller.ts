@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, UseGuards, Query, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { VisitorsService } from './visitors.service';
 import { CreateVisitorDto } from './dto/create-visitor.dto';
 import { UpdateVisitorDto } from './dto/update-visitor.dto';
@@ -10,6 +10,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Throttle } from '@nestjs/throttler';
 import { FilterVisitorDto } from './dto/filter-visitor.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('visitors')
 @UseGuards(AuthGuard())
@@ -18,6 +19,12 @@ export class VisitorsController {
   constructor(
     private readonly visitorsService: VisitorsService,
   ) { }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
+  }
 
   @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Post()
