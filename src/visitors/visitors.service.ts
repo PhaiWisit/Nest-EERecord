@@ -14,11 +14,20 @@ export class VisitorsService {
     private visitorRepository: VisitorsRepository,
   ) { }
 
+  createAndUpload(
+    createVisitorDto: CreateVisitorDto,
+    user: User,
+    imageIdCard_Path: string,
+    imagePlate_Path: string
+  ): Promise<Visitor> {
+    return this.visitorRepository.createAndUpload(createVisitorDto, user, imageIdCard_Path, imagePlate_Path);
+  }
+
   createVisitor(createVisitorDto: CreateVisitorDto, user: User): Promise<Visitor> {
     return this.visitorRepository.createVisitor(createVisitorDto, user);
   }
 
-  getVisitors(filterDto:FilterVisitorDto,user: User): Promise<Visitor[]> {
+  getVisitors(filterDto: FilterVisitorDto, user: User): Promise<Visitor[]> {
     return this.visitorRepository.getVisitors(filterDto, user);
   }
 
@@ -37,11 +46,15 @@ export class VisitorsService {
     return visitor;
   }
 
-  async deleteVisitor(id: string, user: User): Promise<string> {
+  async deleteVisitor(id: string, user: User) {
     const result = await this.visitorRepository.delete({ id, user });
     if (result.affected === 0) {
       throw new NotFoundException(`Visitor with ID ${id} not found`);
     }
-    return 'Deleted';
+    return {
+      statusCode: 200,
+      message: `Visitor with ID ${id} was deleted`
+    }
+
   }
 }

@@ -17,14 +17,14 @@ export class VisitorsRepository extends Repository<Visitor> {
   async getVisitors(
     filterDto: FilterVisitorDto,
     user: User): Promise<Visitor[]> {
-    const {status} = filterDto;
+    const { status } = filterDto;
 
     const query = this.createQueryBuilder('visitor');
     query.where({ user });
     query.orderBy('visitorUpdate', 'DESC');
 
     if (status) {
-    query.andWhere('visitor.visitorStatus = :status', { status });
+      query.andWhere('visitor.visitorStatus = :status', { status });
     }
 
     // if (search) {
@@ -55,6 +55,36 @@ export class VisitorsRepository extends Repository<Visitor> {
     return visitor;
   }
 
+  async createAndUpload(
+    createVisitorDto: CreateVisitorDto,
+    user: User,
+    imageIdCard_Path: string,
+    imagePlate_Path: string
+  ): Promise<Visitor> {
+    const { visitorHouseNumber,
+      visitorContactMatter,
+      visitorEnter,
+      visitorExit,
+      visitorImagePathIdCard,
+      visitorImagePathPalte,
+      visitorStatus,
+      visitorVehicleType } = createVisitorDto;
+
+    const visitor = this.create({
+      visitorHouseNumber,
+      visitorContactMatter,
+      visitorEnter,
+      visitorExit,
+      visitorImagePathIdCard: imageIdCard_Path,
+      visitorImagePathPalte: imagePlate_Path,
+      visitorVehicleType,
+      visitorStatus,
+      user,
+    });
+    await this.save(visitor);
+    return visitor;
+  }
+
 
   async createVisitor(createVisitorDto: CreateVisitorDto, user: User): Promise<Visitor> {
     const { visitorHouseNumber,
@@ -79,4 +109,6 @@ export class VisitorsRepository extends Repository<Visitor> {
     await this.save(visitor);
     return visitor;
   }
+
+
 }

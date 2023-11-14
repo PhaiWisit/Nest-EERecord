@@ -23,7 +23,7 @@ export class Visitor {
     @CreateDateColumn({ name: 'visitorEnter', default: () => 'NOW()' })
     visitorEnter: Date;
 
-    @CreateDateColumn({ name: 'visitorExit' })
+    @CreateDateColumn({ name: 'visitorExit', nullable: true })
     visitorExit: Date;
 
     @Column()

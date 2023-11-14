@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards, Request, } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, Request, UnauthorizedException, } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { User } from './user.entity';
@@ -26,7 +26,16 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
-    return req.user;
+    const user = req.user;
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    return {
+      statusCode: 200,
+      username: req.user.username
+    }
   }
 
 }

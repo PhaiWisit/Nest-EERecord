@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, UseGuards, Query, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, UseGuards, Query, UseInterceptors, UploadedFile, UploadedFiles } from '@nestjs/common';
 import { VisitorsService } from './visitors.service';
 import { CreateVisitorDto } from './dto/create-visitor.dto';
 import { UpdateVisitorDto } from './dto/update-visitor.dto';
@@ -10,7 +10,9 @@ import { AuthService } from 'src/auth/auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Throttle } from '@nestjs/throttler';
 import { FilterVisitorDto } from './dto/filter-visitor.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import multer, { diskStorage } from 'multer';
+import { join } from 'path';
 
 @Controller('visitors')
 @UseGuards(AuthGuard())
@@ -20,10 +22,33 @@ export class VisitorsController {
     private readonly visitorsService: VisitorsService,
   ) { }
 
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
+  @Post('create')
+  @UseInterceptors(FileFieldsInterceptor([
+    { name: 'imageIdCard', maxCount: 1 },
+    { name: 'imagePlate', maxCount: 1 },
+  ], {
+    storage: diskStorage({
+      destination: './uploads/img',
+      filename: function (req, file, cb) {
+        cb(null, file.originalname)
+      }
+    })
+  }))
+  async createAndUpload(
+    @UploadedFiles() files: { imageIdCard?: Express.Multer.File[], imagePlate?: Express.Multer.File[] },
+    @Body() createVisitorDto: CreateVisitorDto,
+    @GetUser() user: User,) {
+    console.log(files);
+    const imageIdCard_Path = `${files.imageIdCard[0].destination}/${files.imageIdCard[0].originalname}`;
+    const imagePlate_Path = `${files.imagePlate[0].destination}/${files.imagePlate[0].originalname}`
+
+    const visitor = await this.visitorsService.createAndUpload(createVisitorDto, user, imageIdCard_Path, imagePlate_Path);
+
+    return {
+      statusCode: 200,
+      data: `Create visitor success ID: ${visitor.id}`
+    };
+
   }
 
   @Throttle({ default: { limit: 3, ttl: 60000 } })
