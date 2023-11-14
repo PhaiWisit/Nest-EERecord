@@ -4,6 +4,7 @@ import { AbstractRepository, DataSource, Repository } from "typeorm";
 import { Injectable, InternalServerErrorException, Logger, NotFoundException } from "@nestjs/common";
 import { CreateVisitorDto } from "./dto/create-visitor.dto";
 import { User } from "src/auth/user.entity";
+import { FilterVisitorDto } from "./dto/filter-visitor.dto";
 
 @EntityRepository(Visitor)
 @Injectable()
@@ -14,16 +15,17 @@ export class VisitorsRepository extends Repository<Visitor> {
   }
 
   async getVisitors(
-    // filterDto: GetTasksFilterDto, 
+    filterDto: FilterVisitorDto,
     user: User): Promise<Visitor[]> {
-    // const { status, search } = filterDto;
+    const {status} = filterDto;
 
     const query = this.createQueryBuilder('visitor');
     query.where({ user });
+    query.orderBy('visitorUpdate', 'DESC');
 
-    // if (status) {
-    //   query.andWhere('task.status = :status', { status });
-    // }
+    if (status) {
+    query.andWhere('visitor.visitorStatus = :status', { status });
+    }
 
     // if (search) {
     //   query.andWhere(
@@ -33,8 +35,8 @@ export class VisitorsRepository extends Repository<Visitor> {
     // }
 
     try {
-      const tasks = await query.getMany();
-      return tasks;
+      const visitors = await query.getMany();
+      return visitors;
     } catch (error) {
       //   this.logger.error(
       //     `Failed to get tasks for user "${
@@ -47,15 +49,9 @@ export class VisitorsRepository extends Repository<Visitor> {
   }
 
   async getVisitorById(id: string, user: User): Promise<Visitor> {
-
     const query = this.createQueryBuilder('visitor');
     query.where({ id, user });
-
-
-
     const visitor = await query.getOne();
-
-
     return visitor;
   }
 
@@ -69,8 +65,6 @@ export class VisitorsRepository extends Repository<Visitor> {
       visitorImagePathPalte,
       visitorStatus,
       visitorVehicleType } = createVisitorDto;
-
-
     const visitor = this.create({
       visitorHouseNumber,
       visitorContactMatter,
@@ -82,7 +76,6 @@ export class VisitorsRepository extends Repository<Visitor> {
       visitorStatus,
       user,
     });
-
     await this.save(visitor);
     return visitor;
   }

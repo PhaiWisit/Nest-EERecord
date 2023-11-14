@@ -3,7 +3,7 @@ import { Timestamp } from "typeorm";
 export class CreateVisitorDto {
     visitorId: number;
     userId: string;
-    visitorStatus: boolean;
+    visitorStatus: string;
     visitorHouseNumber: string;
     visitorContactMatter: string;
     visitorVehicleType: string;

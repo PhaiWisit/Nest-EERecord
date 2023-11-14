@@ -1,14 +1,15 @@
 import { User } from 'src/auth/user.entity';
 import { Exclude } from 'class-transformer';
-import { Entity, Column, PrimaryGeneratedColumn, Timestamp, CreateDateColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Timestamp, CreateDateColumn, ManyToOne, UpdateDateColumn } from 'typeorm';
+import { IsTimeZone } from 'class-validator';
 
 @Entity()
 export class Visitor {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column()
-    visitorStatus: boolean;
+    @Column({ default: 'ACTIVE' })
+    visitorStatus: string;
 
     @Column()
     visitorHouseNumber: string;
@@ -19,10 +20,10 @@ export class Visitor {
     @Column()
     visitorVehicleType: string;
 
-    @CreateDateColumn({ name: 'visitor_enter' })
+    @CreateDateColumn({ name: 'visitorEnter', default: () => 'NOW()' })
     visitorEnter: Date;
 
-    @CreateDateColumn({ name: 'visitor_exit' })
+    @CreateDateColumn({ name: 'visitorExit' })
     visitorExit: Date;
 
     @Column()
@@ -31,10 +32,11 @@ export class Visitor {
     @Column()
     visitorImagePathPalte: string;
 
-    @CreateDateColumn({ name: 'visitor_update', default: () => 'NOW()', nullable: true })
-    visitorUpdateTime: Date;
+    @UpdateDateColumn({ name: 'visitorUpdate', default: () => 'NOW()', nullable: false, })
+    visitorUpdate: Date;
 
     @ManyToOne(() => User, (user) => user.visitors, { eager: false, })
     @Exclude({ toPlainOnly: true })
     user: User;
 }
+

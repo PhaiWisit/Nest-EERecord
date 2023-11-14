@@ -21,7 +21,8 @@ import { ThrottlerModule } from '@nestjs/throttler';
       database: 'nest-eerecord',
       synchronize: true,
       entities: ["dist/**/*.entity{.ts,.js}"],
-      autoLoadEntities: true
+      autoLoadEntities: true,
+      timezone: '07:00'
     }),
     ThrottlerModule.forRoot([{
       ttl: 60000,
