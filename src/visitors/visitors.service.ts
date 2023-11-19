@@ -52,7 +52,7 @@ export class VisitorsService {
       throw new NotFoundException(`Visitor with ID ${id} not found`);
     }
     return {
-      statusCode: 200,
+
       message: `Visitor with ID ${id} was deleted`
     }
 

@@ -39,8 +39,8 @@ export class VisitorsController {
     @Body() createVisitorDto: CreateVisitorDto,
     @GetUser() user: User,) {
     console.log(files);
-    const imageIdCard_Path = `${files.imageIdCard[0].destination}/${files.imageIdCard[0].originalname}`;
-    const imagePlate_Path = `${files.imagePlate[0].destination}/${files.imagePlate[0].originalname}`
+    const imageIdCard_Path = `/uploads/img/${files.imageIdCard[0].originalname}`;
+    const imagePlate_Path = `/uploads/img/${files.imagePlate[0].originalname}`
 
     const visitor = await this.visitorsService.createAndUpload(createVisitorDto, user, imageIdCard_Path, imagePlate_Path);
 
